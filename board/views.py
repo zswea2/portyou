@@ -45,3 +45,8 @@ def create_reply(request, board_id): #댓글 submit 처리
     b = Board.objects.get(id = board_id)
     b.reply_set.create(comment=request.POST['comment'], rep_date=timezone.now())
     return HttpResponseRedirect(reverse('board:detail', args=(board_id,)))
+
+# def del_qua(request, board_id):
+#     del_board = Board.objects.get(id = board_id)
+#     del_board.delete()
+#     return  HttpResponseRedirect(reverse('board:index'))
