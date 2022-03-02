@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -37,7 +37,7 @@ def write(request): #글쓰기
     return render(request, 'board/write.html')
 
 def write_board(request): #글을 등록시 submit처리
-    b = Board(title=request.POST['title'], content=request.POST['detail'], author="choi", pub_date=timezone.now())
+    b = Board(title=request.POST['title'], content=request.POST['detail'], author=request.POST['author'], pub_date=timezone.now())
     b.save()
     return HttpResponseRedirect(reverse('board:index'))
 
@@ -46,7 +46,14 @@ def create_reply(request, board_id): #댓글 submit 처리
     b.reply_set.create(comment=request.POST['comment'], rep_date=timezone.now())
     return HttpResponseRedirect(reverse('board:detail', args=(board_id,)))
 
-# def del_qua(request, board_id):
-#     del_board = Board.objects.get(id = board_id)
-#     del_board.delete()
-#     return  HttpResponseRedirect(reverse('board:index'))
+# def del_board(request, board_id):
+#     b = Board.objects.get(id=board_id)
+#     b.delete()
+#     return redirect('index')
+#     # return redirect('index')
+
+def del_board(request, board_id):
+    b = Board.objects.get(id=board_id)
+    b.delete()
+    return HttpResponseRedirect(reverse('board:index'))
+    # return redirect('index')
